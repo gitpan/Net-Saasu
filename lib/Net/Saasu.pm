@@ -11,11 +11,11 @@ Net::Saasu - Interface to the Saasu online accounting platform!
 
 =head1 VERSION
 
-Version 0.1.1.1.1.1.1
+Version 0.2.2.2.2.2.1
 
 =cut
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 has 'api_url' => (
     is      => 'rw',
@@ -181,6 +181,9 @@ sub _talk {
 
     my $req = HTTP::Request->new($mode, $url);
     if ($mode eq 'POST') {
+        $payload = { tasks => $payload }
+            unless exists $payload->{tasks};
+        $self->xml->set( first_out => [ 'layout', 'status' ] );
         $req->content($self->xml->write($payload));
         $req->header('Content-Type' =>
                 'application/x-www-form-urlencoded; charset=utf-8');
